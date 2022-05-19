@@ -10,7 +10,6 @@ public class ArrayStorage {
 
     void clear() {
         Arrays.fill(storage, 0, size, null); // исправил метод fill
-
     }
 
     void save(Resume r) {
@@ -41,12 +40,13 @@ public class ArrayStorage {
             for (int i = 0; i <= size - 1; i++) { // исправил на size,
                 if (uuid.equalsIgnoreCase(storage[i].uuid)) { //убрал проверку if storage[i] != null
                     storage[i] = null;
-                    storage[size + 1] = storage[i]; // переместил пустое рюзюме в следующую ячейку за базой резюме
+                    storage[i] = storage[size - 1]; // переместил пустое рюзюме в следующую ячейку за базой резюме
+                    storage[size - 1] = null;
                     size--;
                 }
             }
         }
-    }
+    }// крайний элемент сайз копирую
 
     /**
      * @return array, contains only Resumes in storage (without null)
@@ -56,8 +56,6 @@ public class ArrayStorage {
     }
 
     int size() { // убрал цикл, привел к примитиву, добавив невозможность уйти в минус
-        if (size >= 0)
-            return size;
-        else return 0;
+        return size;
     }
 }
