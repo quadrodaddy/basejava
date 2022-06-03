@@ -10,16 +10,15 @@ import java.util.Arrays;
 public class ArrayStorage {
     private Resume[] storage = new Resume[10000];
     private int size = 0;
+    private static final int RESUME_IS_EMPTY = -1;
 
-    public boolean check(String uuid) {
-        boolean search = true;
+    private int findIndex(String uuid) {
         for (int i = 0; i < size; i++) {
-            if (uuid.equalsIgnoreCase(storage[i].getUuid())) {
-                return false;
+            if ((uuid.equalsIgnoreCase(storage[i].getUuid()))) {
+                return i;
             }
         }
-        System.out.println("Error: not resume " + uuid);
-        return search;
+        return RESUME_IS_EMPTY;
     }
 
     public void clear() {
@@ -27,45 +26,60 @@ public class ArrayStorage {
     }
 
     public void update(Resume r) {
-        check(r.getUuid());
-        for (int i = 0; i < size; i++) {
-            if (storage[i].equals(r)) {
-                storage[i].setUuid("New uuid");
+        int index = findIndex(r.getUuid());
+        if (r.getUuid().equalsIgnoreCase(String.valueOf(index))) {
+            System.out.println("Error: not resume " + r.getUuid());
+        } else {
+            for (int i = 0; i < size; i++) {
+                if (storage[i].equals(r)) {
+                    storage[i].setUuid("New uuid");
+                }
             }
         }
     }
 
     public void save(Resume r) {
-        for (int i = 0; i < storage.length; i++) {
-            if (storage[i] == null && size < storage.length - 1) {
-                storage[i] = r;
-                size++;
-                break;
+        int index = findIndex(r.getUuid());
+        if (size >= storage.length) {
+            System.out.println("Error: storage is full");
+        } else if (r.getUuid().equalsIgnoreCase(String.valueOf(index))) {
+            System.out.println("Error: resume " + r.getUuid() + "is exists");
+        } else {
+            for (int i = 0; i < storage.length; i++) {
+                if (storage[i] == null) {
+                    storage[i] = r;
+                    size++;
+                    break;
+                }
             }
-//            if (storage[i].equals(r)) {
-//                System.out.println("Error: resume " + storage[i] + " is exists");
-//            }
         }
     }
 
-
     public Resume get(String uuid) {
-        check(uuid);
-        for (int i = 0; i < size; i++) {
-            if (uuid.equalsIgnoreCase(storage[i].getUuid())) {
-                return storage[i];
+        int index = findIndex(uuid);
+        if (uuid.equalsIgnoreCase(String.valueOf(index))) {
+            System.out.println("Error: not resume " + uuid);
+        } else {
+            for (int i = 0; i < size; i++) {
+                if (uuid.equalsIgnoreCase(storage[i].getUuid())) {
+                    return storage[i];
+                }
             }
         }
         return null;
     }
 
     public void delete(String uuid) {
-        check(uuid);
-        for (int i = 0; i < size; i++) {
-            if (uuid.equalsIgnoreCase(storage[i].getUuid())) {
-                storage[i] = storage[size - 1];
-                storage[size - 1] = null;
-                size--;
+        int index = findIndex(uuid);
+        if (uuid.equalsIgnoreCase(String.valueOf(index))) {
+            System.out.println("Error: not resume " + uuid);
+        } else {
+            for (int i = 0; i < size; i++) {
+                if (uuid.equalsIgnoreCase(storage[i].getUuid())) {
+                    storage[i] = storage[size - 1];
+                    storage[size - 1] = null;
+                    size--;
+                }
             }
         }
     }
@@ -81,3 +95,5 @@ public class ArrayStorage {
         return size;
     }
 }
+
+
