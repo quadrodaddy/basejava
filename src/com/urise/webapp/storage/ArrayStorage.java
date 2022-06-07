@@ -14,7 +14,7 @@ public class ArrayStorage {
 
     private int findIndex(String uuid) {
         for (int i = 0; i < size; i++) {
-            if ((uuid.equalsIgnoreCase(storage[i].getUuid()))) {
+            if (storage[i].getUuid().equals(uuid)) {
                 return i;
             }
         }
@@ -27,14 +27,10 @@ public class ArrayStorage {
 
     public void update(Resume r) {
         int index = findIndex(r.getUuid());
-        if (r.getUuid().equalsIgnoreCase(String.valueOf(index))) {
+        if (index < 0) {
             System.out.println("Error: not resume " + r.getUuid());
         } else {
-            for (int i = 0; i < size; i++) {
-                if (storage[i].equals(r)) {
-                    storage[i].setUuid("New uuid");
-                }
-            }
+           storage[index] = r;
         }
     }
 
@@ -42,45 +38,32 @@ public class ArrayStorage {
         int index = findIndex(r.getUuid());
         if (size >= storage.length) {
             System.out.println("Error: storage is full");
-        } else if (r.getUuid().equalsIgnoreCase(String.valueOf(index))) {
-            System.out.println("Error: resume " + r.getUuid() + "is exists");
+        } else if (index >= 0) {
+            System.out.println("Error: resume " + r.getUuid() + " is exists");
         } else {
-            for (int i = 0; i < storage.length; i++) {
-                if (storage[i] == null) {
-                    storage[i] = r;
-                    size++;
-                    break;
-                }
-            }
+            storage[size] = r;
+            size++;
         }
     }
 
     public Resume get(String uuid) {
         int index = findIndex(uuid);
-        if (uuid.equalsIgnoreCase(String.valueOf(index))) {
+        if (index < 0) {
             System.out.println("Error: not resume " + uuid);
         } else {
-            for (int i = 0; i < size; i++) {
-                if (uuid.equalsIgnoreCase(storage[i].getUuid())) {
-                    return storage[i];
-                }
-            }
+            return storage[index];
         }
         return null;
     }
 
     public void delete(String uuid) {
         int index = findIndex(uuid);
-        if (uuid.equalsIgnoreCase(String.valueOf(index))) {
+        if (index < 0) {
             System.out.println("Error: not resume " + uuid);
         } else {
-            for (int i = 0; i < size; i++) {
-                if (uuid.equalsIgnoreCase(storage[i].getUuid())) {
-                    storage[i] = storage[size - 1];
-                    storage[size - 1] = null;
-                    size--;
-                }
-            }
+            storage[index] = storage[size - 1];
+            storage[size - 1] = null;
+            size--;
         }
     }
 
