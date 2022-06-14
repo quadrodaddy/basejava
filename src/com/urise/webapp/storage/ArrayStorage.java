@@ -7,8 +7,9 @@ import java.util.Arrays;
 /**
  * Array based storage for Resumes
  */
-public class ArrayStorage {
-    private Resume[] storage = new Resume[10000];
+public class ArrayStorage implements Storage{
+    private static final int STORAGE_LIMIT = 10000;
+    private final Resume[] storage = new Resume[STORAGE_LIMIT];
     private int size = 0;
     private static final int RESUME_IS_EMPTY = -1;
 
@@ -30,15 +31,14 @@ public class ArrayStorage {
         if (index < 0) {
             System.out.println("Error: not resume " + r.getUuid());
         } else {
-           storage[index] = r;
+            storage[index] = r;
         }
     }
 
     public void save(Resume r) {
-        int index = findIndex(r.getUuid());
-        if (size >= storage.length) {
+        if (size >= STORAGE_LIMIT) {
             System.out.println("Error: storage is full");
-        } else if (index >= 0) {
+        } else if (findIndex(r.getUuid()) >= 0) {
             System.out.println("Error: resume " + r.getUuid() + " is exists");
         } else {
             storage[size] = r;
